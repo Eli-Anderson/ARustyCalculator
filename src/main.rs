@@ -1,7 +1,7 @@
 #[macro_use] extern crate text_io;
 
 fn main() {
-    let mut total : i64 = 0;
+    let mut total : f64 = 0_f64;
     let instructions = "    Enter a calculation to begin.
     The expression must be space separated, however you can
     also split your expression into multiple lines if desired.
@@ -26,7 +26,7 @@ fn main() {
                 operator = input; // save our new operator
             } else {
                 // check if input is a number, if so set total as it
-                total = match input.parse::<i64>() {
+                total = match input.parse::<f64>() {
                     Ok(number) => number,
                     Err(_) => total,
                 };
@@ -41,43 +41,51 @@ fn main() {
                 will a number that does not change the result (i.e. 5 * 1 == 5).
                 */
                 
-                "*" => total *= match input.parse::<i64>() {
+                "*" => total *= match input.parse::<f64>() {
                     Ok(number) => number,
                     Err(_) => {
                         print!("Wrong!\n");
-                        1
+                        1_f64
                     }
                 },
-                "+" => total += match input.parse::<i64>() {
+                "+" => total += match input.parse::<f64>() {
                     Ok(number) => number,
                     Err(_) => {
                         print!("Wrong!\n");
-                        0
+                        0_f64
                     }
                 },
-                "-" => total -= match input.parse::<i64>() {
+                "-" => total -= match input.parse::<f64>() {
                     Ok(number) => number,
                     Err(_) => {
                         print!("Wrong!\n");
-                        0
+                        0_f64
                     }
                 },
-                "/" => total /= match input.parse::<i64>() {
-                    Ok(number) => number,
+                "/" => total /= match input.parse::<f64>() {
+                    Ok(number) => {
+                        if number != 0_f64 {
+                            number
+                        } else {
+                            print!("Good try!\n");
+                            1_f64
+                        }
+
+                    },
                     Err(_) => {
                         print!("Wrong!\n");
-                        1
+                        1_f64
                     }
                 },
                 "^" => {
-                        let exp = match input.parse::<u32>() {
+                        let exp = match input.parse::<f64>() {
                             Ok(number) => number,
                             Err(_) => {
                                 print!("Wrong!\n");
-                                1
+                                1_f64
                             }
                         };
-                        total = total.pow(exp);
+                        total = total.powf(exp);
                 },
                 _ => print!("How did you get here?\n"),
             }
